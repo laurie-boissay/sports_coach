@@ -36,7 +36,7 @@ def main_loop():
                 while time.time() + exercices_duration <= session_end :
                     
                     for ex in exercices_name:
-                        if time.time() + exercices_duration*3 <= session_end :
+                        if time.time() + exercices_duration*2 <= session_end :
                             start_exercice(ex, exercices_duration)
                             if time.time() + exercices_duration*2 <= session_end :
                                 start_exercice("pause", break_duration)
