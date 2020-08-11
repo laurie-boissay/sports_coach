@@ -10,14 +10,13 @@ import speech_recognition as sr
 from text_to_speech import say_text
 
 
-def listen_text():
-    text = "Pour commencer dîtes : démarrer."
+def listen_text(invitation_text):
     # get audio from the microphone
     r = sr.Recognizer()
     with sr.Microphone() as source:
         # listen for 1 second to calibrate the energy threshold for ambient noise levels.
         r.adjust_for_ambient_noise(source)
-        say_text(text)
+        say_text(invitation_text)
         audio = r.listen(source)
 
     try:

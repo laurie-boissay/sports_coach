@@ -1,24 +1,24 @@
 import time
+import math
 
 
 from text_to_speech import say_text
 
 
-def start_exercice(exercice_name, exercices_duration):
+def start_exercice(exercice_name, exercices_duration, warning_frequency):
+
 	exercice_start = time.time()
 	exercice_end = exercice_start + exercices_duration
 
-	say_text(exercice_name)
-	counter = 0
+	ex_text = exercice_name + " " + str(round(exercices_duration, 2)) + " secondes."
+	say_text(ex_text)
 	
-	while time.time()  <= exercice_end:
-		if exercice_end - 20 <= time.time() and counter == 0:
-			say_text("Encore 20 secondes.")
-			counter += 1
+	while time.time() <= exercice_end:
+		
+		nbr_sec = exercice_end - time.time()
 
-		elif exercice_end - 10 <= time.time() and counter == 1:
-			say_text("Encore 10 secondes.")
-			counter += 1
+		if warning_frequency != 0 and nbr_sec % warning_frequency == 0 and nbr_sec > 0:
+			say_text(str(round(nbr_sec)))
 
 	say_text("Stop.")
 

@@ -15,13 +15,17 @@ def main_loop():
     session_duration_min = 20
     session_duration_sec = session_duration_min*60
     exercices_duration = 30 #secondes
-    break_duration = 30 #secondes
+    break_duration = 20 #secondes
+    warm_up_duration = 60 #secondes
+    warning_frequency = 10 #secondes
     error_text = "Je n'ai pas compris."
+    start_text = "Pour commencer dîtes : démarrer."
+
     
     quitter = False
     
     while not quitter:
-        text = listen_text()
+        text = listen_text(start_text)
 
         if "error" in text :
                 say_text(error_text)
@@ -31,20 +35,20 @@ def main_loop():
                 session_start = cmd_go()
                 session_end = session_start + session_duration_sec
                 
-                start_exercice("échauffement", 60)
+                start_exercice("échauffement", warm_up_duration, warning_frequency)
 
                 while time.time() + exercices_duration <= session_end :
                     
                     for ex in exercices_name:
-                        if time.time() + exercices_duration*2 <= session_end :
-                            start_exercice(ex, exercices_duration)
-                            if time.time() + exercices_duration*2 <= session_end :
-                                start_exercice("pause", break_duration)
+                        if time.time() + exercices_duration + break_duration <= session_end :
+                            start_exercice(ex, exercices_duration, warning_frequency)
+                            if time.time() + exercices_duration + break_duration <= session_end and break_duration > 0 :
+                                start_exercice("pause", break_duration, warning_frequency)
                         else:
                             break
                     
                 stretching_duration = session_end - time.time()
-                start_exercice("étirements", stretching_duration)
+                start_exercice("étirements", stretching_duration, warning_frequency)
                     
                 quitter = True
 
