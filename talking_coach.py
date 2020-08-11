@@ -52,9 +52,9 @@ def main_loop():
                     
                 quitter = True
 
-    session_duration_sec = round((time.time()-session_start)/60)
+    session_duration_min = round((time.time()-session_start)/60)
     bravo_text = "Bravo vous avez fait "
-    bravo_text += str(session_duration_sec)
+    bravo_text += str(session_duration_min)
     bravo_text += " minutes de sport."
     say_text(bravo_text)
     
