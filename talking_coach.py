@@ -1,65 +1,68 @@
 #!/usr/bin/python3.8
 # coding:u8
 
-import time
-import math
 
-
-from text_to_speech import say_text
 from speech_rec import listen_text
 from commands import *
-from exercices import *
-from preferences import user_preferences as p
+from exercises import *
 
 
-def main_loop():
-    error_text = "Je n'ai pas compris."
-    start_text = "Pour commencer dîtes : démarrer."
+def menu_loop():
+    quit = False
+    welcome_text = "Bonjour, je suis votre coach sportif.\n"
+    #welcome_text = "Hello I'm your sports coach.\n"
+
+    repeat_text = "Je n'ai pas compris."
+    #repeat_text = "I did not understand."
+
+    error_text = "j'ai rencontré une erreur."
+    #error_text = "I encountered an error."
+
+    bye_text = "A bientôt !"
+    #bye_text = "See you soon !"
     
-    quitter = False
-    
-    while not quitter:
-        text = listen_text(start_text)
+    menu_key_words = [
+        "commencer", # "start",
+        "durée", # "duration",
+        "exercice", # "exercises",
+        "quitter", # "quit",
+    ]
 
-        if "error" in text :
-                say_text(error_text)
+    options_text = menu_text(menu_key_words)
 
-        else :
-            if "démarrer" in text :
-                #while text != "C'est partit !":
-                    #text = cmd_go()
-                    #say_text(text)
+    say_text(welcome_text)
 
-                session_start = time.time()
-                session_end = session_start + p["session_duration_min"]*60
+    while not quit:
+        say_text(options_text)
+        text = listen_text()
 
-                start_exercice("échauffement", p["warm_up_duration"], p["warning_frequency"])
+        # Do sport :
+        if menu_key_words[0] in text :
+            do_exercises()
 
-                while time.time() + p["exercices_duration"] <= session_end :
-                    
-                    for ex in exercices_name:
-                        if time.time() + p["exercices_duration"] + p["mini_stretching_duration"] <= session_end :
-                            start_exercice(ex, p["exercices_duration"], p["warning_frequency"])
-                            if time.time() + p["break_duration"] + p["mini_stretching_duration"] <= session_end and p["break_duration"] > 0 :
-                                start_exercice("pause", p["break_duration"], p["warning_frequency"])
-                        else:
-                            break
-                    
-                    stretching_duration = session_end - time.time()
-                    start_exercice("étirements", stretching_duration, p["warning_frequency"])
-                    
-                quitter = True
+        # Manage duration preferences :
+        elif menu_key_words[1] in text:
+            checking_user_preferences(error_text, repeat_text)
 
-    p["session_duration_min"] = round((time.time()-session_start)/60)
-    bravo_text = "Bravo vous avez fait "
-    bravo_text += str(p["session_duration_min"])
-    bravo_text += " minutes de sport."
-    say_text(bravo_text)
-    
+        # Manage exercises names :
+        elif menu_key_words[2] in text :
+            checking_exercises(error_text, repeat_text)
+
+        # Leave the program :
+        elif menu_key_words[3] in text:
+            quit = True
+            say_text(bye_text)
+
+        # Error :
+        elif "error" in text:
+            say_text(error_text)
+        
+        else:
+            say_text(repeat_text)
+                
 
 if __name__ == '__main__':
-    main_loop()
-
+    menu_loop()
 
 
 

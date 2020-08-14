@@ -10,7 +10,10 @@ import speech_recognition as sr
 from text_to_speech import say_text
 
 
-def listen_text(invitation_text):
+def listen_text():
+    invitation_text = "J'écoute."
+    #invitation_text = "I listen."
+
     # get audio from the microphone
     r = sr.Recognizer()
     with sr.Microphone() as source:
@@ -21,8 +24,9 @@ def listen_text(invitation_text):
 
     try:
         text = r.recognize_google(audio, language="fr-FR")
+        #text = r.recognize_google(audio)
     except sr.UnknownValueError:
-       text = "error "
+       text = "IDNU"
     except sr.RequestError as e:
        text = "error "
 
