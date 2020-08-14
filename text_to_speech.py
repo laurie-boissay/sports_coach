@@ -6,13 +6,16 @@
 import pyttsx3
 
 
+from default_preferences import user_language
+
+
 def say_text(text):
     engine = pyttsx3.init()
     engine.setProperty('rate', 110)
 
-    #remove these two options for English language :
-    fr_voice_id = "french"
-    engine.setProperty('voice', fr_voice_id)
+    if user_language[0] == "fr":
+	    fr_voice_id = "french"
+	    engine.setProperty('voice', fr_voice_id)
 
     engine.say(text)
     engine.runAndWait()

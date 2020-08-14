@@ -7,12 +7,18 @@
 # https://bbs.archlinux.org/viewtopic.php?id=245040
 
 import speech_recognition as sr
+
+
 from text_to_speech import say_text
+from default_preferences import user_language
 
 
 def listen_text():
-    invitation_text = "J'écoute."
-    #invitation_text = "I listen."
+    if user_language[0] == "fr":
+        invitation_text = "J'écoute."
+    
+    else: # user_language[0] == "en": 
+        invitation_text = "I listen."
 
     # get audio from the microphone
     r = sr.Recognizer()
@@ -23,8 +29,12 @@ def listen_text():
         audio = r.listen(source)
 
     try:
-        text = r.recognize_google(audio, language="fr-FR")
-        #text = r.recognize_google(audio)
+        if user_language[0] == "fr":
+            text = r.recognize_google(audio, language="fr-FR")
+        
+        else: # user_language[0] == "en":
+            text = r.recognize_google(audio)
+
     except sr.UnknownValueError:
        text = "IDNU"
     except sr.RequestError as e:

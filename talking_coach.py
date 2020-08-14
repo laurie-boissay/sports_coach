@@ -2,31 +2,51 @@
 # coding:u8
 
 
+##### RESSOURCES ############################################
+#https://stackoverflow.com/questions/4041238/why-use-def-main
+#https://www.pythonforbeginners.com/system/python-sys-argv
+
+
+import sys
+
+
+from text_to_speech import say_text
 from speech_rec import listen_text
-from commands import *
-from exercises import *
+from commands import checking_user_preferences, user_language_preference, menu_text
+from exercises import do_exercises, checking_exercises
+from default_preferences import user_language
 
 
-def menu_loop():
+def menu_loop(argv):
+    user_language_preference(argv)
+
     quit = False
-    welcome_text = "Bonjour, je suis votre coach sportif.\n"
-    #welcome_text = "Hello I'm your sports coach.\n"
 
-    repeat_text = "Je n'ai pas compris."
-    #repeat_text = "I did not understand."
+    if user_language[0] == "fr":
+        welcome_text = "Bonjour, je suis votre coach sportif.\n"
+        repeat_text = "Je n'ai pas compris."
+        error_text = "j'ai rencontré une erreur."
+        bye_text = "A bientôt !"
+        
+        menu_key_words = [
+        "commencer",
+        "durée",
+        "exercice",
+        "quitter",
+        ]
 
-    error_text = "j'ai rencontré une erreur."
-    #error_text = "I encountered an error."
-
-    bye_text = "A bientôt !"
-    #bye_text = "See you soon !"
-    
-    menu_key_words = [
-        "commencer", # "start",
-        "durée", # "duration",
-        "exercice", # "exercises",
-        "quitter", # "quit",
-    ]
+    else: # user_language[0] == "en":
+        welcome_text = "Hello I'm your sports coach.\n"
+        repeat_text = "I did not understand."
+        error_text = "I encountered an error."
+        bye_text = "See you soon !"
+        
+        menu_key_words = [
+            "start",
+            "duration",
+            "exercises",
+            "quit",
+        ]
 
     options_text = menu_text(menu_key_words)
 
@@ -62,10 +82,13 @@ def menu_loop():
                 
 
 if __name__ == '__main__':
-    menu_loop()
+    menu_loop(sys.argv)
 
 
 
 
 # cd /home/jaenne/Python/coach
 # ./talking_coach.py
+# ./talking_coach.py fr
+
+

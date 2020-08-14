@@ -4,46 +4,62 @@ import math
 
 from text_to_speech import say_text
 from speech_rec import listen_text
-from default_preferences import user_preferences as p, exercises_name
+from default_preferences import user_preferences as p, user_language
 from commands import ask_new_value, menu_text
 
 
 def start_exercise(exercise_name, exercises_duration):
+    exercise_start = time.time()
+    exercise_end = exercise_start + exercises_duration
 
-	exercise_start = time.time()
-	exercise_end = exercise_start + exercises_duration
+    if user_language[0] == "fr":
+        stop_text = "Stop."
+        sec_text = " secondes."
 
-	ex_text = exercise_name + " " + str(round(exercises_duration)) + " secondes."
-	say_text(ex_text)
-	
-	while time.time() <= exercise_end:
-		
-		nbr_sec = round(exercise_end - time.time())
+    else: #user_language[0] == "en":
+        stop_text = "Stop."
+        sec_text = " secondes."
+    
+    ex_text = exercise_name + " " + str(round(exercises_duration)) + sec_text
+    say_text(ex_text)
+    
+    while time.time() <= exercise_end:
+        nbr_sec = round(exercise_end - time.time())
 
-		if p["countdown_frequency"] != 0 and nbr_sec % p["countdown_frequency"] == 0 and nbr_sec > 0:
-			say_text(str(nbr_sec))
+        if p["countdown_frequency"] != 0 and nbr_sec % p["countdown_frequency"] == 0 and nbr_sec > 0:
+            say_text(str(nbr_sec))
 
-	say_text("Stop.")
+    say_text(stop_text)
 
 
 def end_exercises(session_start):
     p["session_duration_min"] = round((time.time()-session_start)/60)
-    
-    bravo_text = "Bravo vous avez fait "
-    #bravo_text = "Well done you did "
-    bravo_text += str(p["session_duration_min"])
-    bravo_text += " minutes de sport."
-    #bravo_text += " minutes of sport."
+
+    if user_language[0] == "fr":
+        bravo_text = "Bravo vous avez fait "
+        bravo_text += str(p["session_duration_min"])
+        bravo_text += " minutes de sport."
+
+    else: #user_language[0] == "en":
+        bravo_text = "Well done you did "
+        bravo_text += str(p["session_duration_min"])
+        bravo_text += " minutes of sport."
 
     say_text(bravo_text)
 
 
 def do_exercises():
-    warm_up_text = "échauffement"
-    #warm_up_text = "warm up"
+    if user_language[0] == "fr":
+        from default_preferences import exercises_name_fr as exercises_name
+        warm_up_text = "échauffement"
+        stretching_text = "étirements"
+        break_text = "pause"
 
-    stretching_text = "étirements"
-    #stretching_text = "stretching"
+    else: #user_language[0] == "en":
+        from default_preferences import exercises_name
+        warm_up_text = "warm up"
+        stretching_text = "stretching"
+        break_text = "break"
 
     session_start = time.time()
     session_end = session_start + p["session_duration_min"]*60
@@ -56,7 +72,7 @@ def do_exercises():
             if time.time() + p["exercises_duration"] + p["mini_stretching_duration"] <= session_end :
                 start_exercise(ex, p["exercises_duration"])
                 if time.time() + p["break_duration"] + p["mini_stretching_duration"] <= session_end and p["break_duration"] > 0 :
-                    start_exercise("pause", p["break_duration"])
+                    start_exercise(break_text, p["break_duration"])
             else:
                 break
         
@@ -68,26 +84,37 @@ def do_exercises():
 
 def checking_exercises(error_text, repeat_text):
     quit = False
-    
-    removed_text = "La valeur a été supprimée."
-    #removed_text = "The value has been deleted."
-    
-    no_exercises_text = "Il n'y a pas d'exercice dans votre liste."
-    #no_exercises_text = "There is no exercise on your list."
-    
-    list_text = "Voici la liste de vos exercices : "
-    #list_text = "Here is the list of your exercises :"
-    
-    exit_text = "Sortie du menu."
-    #exit_text = "Exit the menu."
-    
-    menu_key_words = [
-        "d'accord", # "O K",
-        "modifier", # "modify",
-        "supprimer", # "remove",
-        "quitter", # "quit",
-    ]
+
+    if user_language[0] == "fr":
+        removed_text = "La valeur a été supprimée."
+        list_text = "Voici la liste de vos exercices : "
+        exit_text = "Sortie du menu."
+        
+        menu_key_words = [
+            "conserver",
+            "modifier",
+            "supprimer",
+            "quitter",
+        ]
+
+    else: #user_language[0] == "en":
+        removed_text = "The value has been deleted."
+        list_text = "Here is the list of your exercises :"
+        exit_text = "Exit the menu."
+        
+        menu_key_words = [
+            "keep",
+            "modify",
+            "remove",
+            "quit",
+        ]
+
     check_text = menu_text(menu_key_words)
+    
+    if user_language[0] == "fr":
+        from default_preferences import exercises_name_fr as exercises_name
+    else: #user_language[0] == "en":
+        from default_preferences import exercises_name
 
     if len(exercises_name) > 0:
         say_text(list_text)
@@ -131,32 +158,53 @@ def checking_exercises(error_text, repeat_text):
                     else:
                         say_text(repeat_text)
 
-    if len(exercises_name) == 0:
-        say_text(no_exercises_text)
-
+    clean_up_exercises_name()
     add_an_exercise(error_text, repeat_text)
+    clean_up_exercises_name()
 
+
+def clean_up_exercises_name():
+    if user_language[0] == "fr":
+        from default_preferences import exercises_name_fr as exercises_name
+        no_exercises_text = "Il n'y a pas d'exercice dans votre liste."
+        
+    else: #user_language[0] == "en":
+        from default_preferences import exercises_name
+        no_exercises_text = "There is no exercise on your list."
+    
     for ex in exercises_name:
         if ex == "":
             exercises_name.remove(ex)
 
+    if len(exercises_name) == 0:
+        say_text(no_exercises_text)
+
     
 def add_an_exercise(error_text, repeat_text):
     quit = False
-    
-    ask_text = "Voulez-vous ajouter un exercice ?"
-    #ask_text = "Do you want to add an exercise?"
-    
-    menu_key_words = [
-        "ajouter", # "add",
-        "quitter", # "quit",
-    ]
-    add_text = menu_text(menu_key_words)
 
+    if user_language[0] == "fr":
+        from default_preferences import exercises_name_fr as exercises_name
+        ask_text = "Voulez-vous ajouter un exercice ?"
+
+        menu_key_words = [
+            "ajouter",
+            "quitter",
+        ]
+
+    else: #user_language[0] == "en":
+        from default_preferences import exercises_name
+        ask_text = "Do you want to add an exercise?"
+    
+        menu_key_words = [
+            "add",
+            "quit",
+        ]
+
+    add_text = menu_text(menu_key_words)
     say_text(ask_text)
 
-    while not quit:
-        
+    while not quit:        
         say_text(add_text)
         text = listen_text()
 
