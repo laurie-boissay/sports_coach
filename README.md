@@ -10,3 +10,6 @@ Launch in English :
 
 Launch in French :
   ./talking_coach.py fr
+  
+TO DO :
+  Save user preferences in a file.
