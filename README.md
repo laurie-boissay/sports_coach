@@ -1,7 +1,7 @@
 # sports_coach
 
 
-A simple talking program to help me to do exercise.
+A simple talking program to help me to do exercise. Fully voice controlled, nothing to read.
 
 Main is talking coach.
 
