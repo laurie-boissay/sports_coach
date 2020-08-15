@@ -124,7 +124,7 @@ def ask_new_value(error_text, repeat_text, old_value, value_type):
 
     if user_language[0] == "fr":
         ask_text = "Quelle est la nouvelle valeur ?"
-        not_changed_text = "la valeur ne sera as modifiée."
+        not_changed_text = "la valeur ne sera pas modifiée."
         ok_text = "La valeur a bien été modifiée."
         cancel_text = "annuler"
 
