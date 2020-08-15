@@ -4,7 +4,7 @@ import math
 
 from text_to_speech import say_text
 from speech_rec import listen_text
-from default_parameters import user_parameters as p, user_language
+from default_parameters import user_language
 from commands import ask_new_value, menu_text
 from file_management import read_an_object, save_an_object
 
@@ -12,6 +12,7 @@ from file_management import read_an_object, save_an_object
 def start_exercise(exercise_name, exercises_duration):
     exercise_start = time.time()
     exercise_end = exercise_start + exercises_duration
+    p = read_an_object("durations")
 
     if user_language[0] == "fr":
         stop_text = "Stop."
@@ -34,6 +35,7 @@ def start_exercise(exercise_name, exercises_duration):
 
 
 def end_exercises(session_start):
+    p = read_an_object("durations")
     p["session_duration_min"] = round((time.time()-session_start)/60)
 
     if user_language[0] == "fr":
@@ -50,6 +52,8 @@ def end_exercises(session_start):
 
 
 def do_exercises():
+    p = read_an_object("durations")
+    
     if user_language[0] == "fr":
         warm_up_text = "échauffement"
         stretching_text = "étirements"
