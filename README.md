@@ -15,3 +15,5 @@ You can modify and save your preferences.
   
 TO DO :
   Test, test, test !
+  
+Whithout joke or encouragement ! Try it, it's free !
