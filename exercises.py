@@ -49,6 +49,7 @@ def end_exercises(session_start):
         bravo_text += " minutes of sport."
 
     say_text(bravo_text)
+    print(bravo_text)
 
 
 def do_exercises():
@@ -85,12 +86,12 @@ def do_exercises():
                     print(break_text)
             else:
                 quit = True
-                stretching_duration = session_end - time.time()
-                start_exercise(stretching_text, stretching_duration)
-                print(stretching_text)
+    
+    stretching_duration = session_end - time.time()
+    start_exercise(stretching_text, stretching_duration)
+    print(stretching_text)
 
     end_exercises(session_start)
-    print(fin)
 
 
 def checking_exercises(error_text, repeat_text):
