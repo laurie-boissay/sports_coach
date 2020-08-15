@@ -11,5 +11,7 @@ Launch in English :
 Launch in French :
   ./talking_coach.py fr
   
+You can modify and save your preferences.
+  
 TO DO :
   Test, test, test !
