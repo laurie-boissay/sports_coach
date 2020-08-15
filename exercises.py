@@ -53,37 +53,44 @@ def end_exercises(session_start):
 
 def do_exercises():
     p = read_an_object("durations")
+    exercises_name = read_an_object("exercises")
+    quit = False
     
     if user_language[0] == "fr":
+        start_text = "C'est partit pour " + str(p["session_duration_min"]) + " minutes de sport."
         warm_up_text = "échauffement"
         stretching_text = "étirements"
         break_text = "pause"
 
     else: #user_language[0] == "en":
+        start_text = "It's gone for " + str(p["session_duration_min"]) + " minutes of sport."
         warm_up_text = "warm up"
         stretching_text = "stretching"
         break_text = "break"
 
-    exercises_name = read_an_object("exercises")
     session_start = time.time()
     session_end = session_start + p["session_duration_min"]*60
 
+    say_text(start_text)
     start_exercise(warm_up_text, p["warm_up_duration"])
+    print(warm_up_text)
 
-    while time.time() + p["exercises_duration"] <= session_end :
-        
+    while not quit:
         for ex in exercises_name:
             if time.time() + p["exercises_duration"] + p["mini_stretching_duration"] <= session_end :
                 start_exercise(ex, p["exercises_duration"])
+                print(ex)
                 if time.time() + p["break_duration"] + p["mini_stretching_duration"] <= session_end and p["break_duration"] > 0 :
                     start_exercise(break_text, p["break_duration"])
+                    print(break_text)
             else:
-                break
-        
-        stretching_duration = session_end - time.time()
-        start_exercise(stretching_text, stretching_duration)
+                quit = True
+                stretching_duration = session_end - time.time()
+                start_exercise(stretching_text, stretching_duration)
+                print(stretching_text)
 
     end_exercises(session_start)
+    print(fin)
 
 
 def checking_exercises(error_text, repeat_text):

@@ -1,5 +1,5 @@
 user_parameters = {
-    "session_duration_min" : 20, #minutes
+    "session_duration_min" : 30, #minutes
     "exercises_duration" : 30, #seconds
     "break_duration" : 20, #seconds
     "warm_up_duration" : 60, #seconds
