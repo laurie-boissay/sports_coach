@@ -49,7 +49,6 @@ def end_exercises(session_start):
         bravo_text += " minutes of sport."
 
     say_text(bravo_text)
-    print(bravo_text)
 
 
 def do_exercises():
@@ -74,22 +73,18 @@ def do_exercises():
 
     say_text(start_text)
     start_exercise(warm_up_text, p["warm_up_duration"])
-    print(warm_up_text)
 
     while not quit:
         for ex in exercises_name:
             if time.time() + p["exercises_duration"] + p["mini_stretching_duration"] <= session_end :
                 start_exercise(ex, p["exercises_duration"])
-                print(ex)
                 if time.time() + p["break_duration"] + p["mini_stretching_duration"] <= session_end and p["break_duration"] > 0 :
                     start_exercise(break_text, p["break_duration"])
-                    print(break_text)
             else:
                 quit = True
     
     stretching_duration = session_end - time.time()
     start_exercise(stretching_text, stretching_duration)
-    print(stretching_text)
 
     end_exercises(session_start)
 
