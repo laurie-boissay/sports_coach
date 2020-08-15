@@ -12,20 +12,22 @@ import sys
 
 from text_to_speech import say_text
 from speech_rec import listen_text
-from commands import checking_user_preferences, user_language_preference, menu_text
+from commands import checking_user_parameters, user_language_preference, menu_text
+from default_parameters import user_language
+from file_management import create_default_pref
 from exercises import do_exercises, checking_exercises
-from default_preferences import user_language
 
 
 def menu_loop(argv):
     user_language_preference(argv)
+    create_default_pref()
 
     quit = False
 
     if user_language[0] == "fr":
         welcome_text = "Bonjour, je suis votre coach sportif.\n"
         repeat_text = "Je n'ai pas compris."
-        error_text = "j'ai rencontré une erreur."
+        error_text = "J'ai rencontré une erreur."
         bye_text = "A bientôt !"
         
         menu_key_words = [
@@ -60,9 +62,9 @@ def menu_loop(argv):
         if menu_key_words[0] in text :
             do_exercises()
 
-        # Manage duration preferences :
+        # Manage duration parameters :
         elif menu_key_words[1] in text:
-            checking_user_preferences(error_text, repeat_text)
+            checking_user_parameters(error_text, repeat_text)
 
         # Manage exercises names :
         elif menu_key_words[2] in text :
@@ -73,7 +75,6 @@ def menu_loop(argv):
             quit = True
             say_text(bye_text)
 
-        # Error :
         elif "error" in text:
             say_text(error_text)
         

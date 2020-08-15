@@ -4,8 +4,9 @@ import math
 
 from text_to_speech import say_text
 from speech_rec import listen_text
-from default_preferences import user_preferences as p, user_language
+from default_parameters import user_parameters as p, user_language
 from commands import ask_new_value, menu_text
+from file_management import read_an_object, save_an_object
 
 
 def start_exercise(exercise_name, exercises_duration):
@@ -50,17 +51,16 @@ def end_exercises(session_start):
 
 def do_exercises():
     if user_language[0] == "fr":
-        from default_preferences import exercises_name_fr as exercises_name
         warm_up_text = "échauffement"
         stretching_text = "étirements"
         break_text = "pause"
 
     else: #user_language[0] == "en":
-        from default_preferences import exercises_name
         warm_up_text = "warm up"
         stretching_text = "stretching"
         break_text = "break"
 
+    exercises_name = read_an_object("exercises")
     session_start = time.time()
     session_end = session_start + p["session_duration_min"]*60
 
@@ -84,6 +84,7 @@ def do_exercises():
 
 def checking_exercises(error_text, repeat_text):
     quit = False
+    exercises_name = read_an_object("exercises")
 
     if user_language[0] == "fr":
         removed_text = "La valeur a été supprimée."
@@ -110,11 +111,6 @@ def checking_exercises(error_text, repeat_text):
         ]
 
     check_text = menu_text(menu_key_words)
-    
-    if user_language[0] == "fr":
-        from default_preferences import exercises_name_fr as exercises_name
-    else: #user_language[0] == "en":
-        from default_preferences import exercises_name
 
     if len(exercises_name) > 0:
         say_text(list_text)
@@ -125,31 +121,31 @@ def checking_exercises(error_text, repeat_text):
             
             else:
                 say_text(exercises_name[ex])
-                preferences_checked = False
+                parameters_checked = False
                 
-                while not preferences_checked:
+                while not parameters_checked:
                     say_text(check_text)
                     text = listen_text()
                     
                     #Don't change value :
                     if menu_key_words[0] in text :
-                        preferences_checked = True
+                        parameters_checked = True
 
                     #Modify value :
                     elif menu_key_words[1] in text :
                         value = ask_new_value(error_text, repeat_text, exercises_name[ex], "string")
                         exercises_name[ex] = value
-                        preferences_checked = True
+                        parameters_checked = True
 
                     #Remove Value :
                     elif menu_key_words[2] in text :
                         exercises_name[ex] = ""
-                        preferences_checked = True
+                        parameters_checked = True
                         say_text(removed_text)
 
                     #Leave menu :
                     elif menu_key_words[3] in text :
-                        preferences_checked = True
+                        parameters_checked = True
                         quit = True
 
                     elif "error" in text:
@@ -158,33 +154,32 @@ def checking_exercises(error_text, repeat_text):
                     else:
                         say_text(repeat_text)
 
-    clean_up_exercises_name()
+    clean_up(exercises_name)
+    save_an_object(exercises_name, "exercises")
     add_an_exercise(error_text, repeat_text)
-    clean_up_exercises_name()
+    clean_up(exercises_name)
 
 
-def clean_up_exercises_name():
+def clean_up(a_list):
     if user_language[0] == "fr":
-        from default_preferences import exercises_name_fr as exercises_name
         no_exercises_text = "Il n'y a pas d'exercice dans votre liste."
         
     else: #user_language[0] == "en":
-        from default_preferences import exercises_name
         no_exercises_text = "There is no exercise on your list."
     
-    for ex in exercises_name:
+    for ex in a_list:
         if ex == "":
-            exercises_name.remove(ex)
+            a_list.remove(ex)
 
-    if len(exercises_name) == 0:
+    if len(a_list) == 0:
         say_text(no_exercises_text)
 
     
 def add_an_exercise(error_text, repeat_text):
     quit = False
+    exercises_name = read_an_object("exercises")
 
     if user_language[0] == "fr":
-        from default_preferences import exercises_name_fr as exercises_name
         ask_text = "Voulez-vous ajouter un exercice ?"
 
         menu_key_words = [
@@ -193,7 +188,6 @@ def add_an_exercise(error_text, repeat_text):
         ]
 
     else: #user_language[0] == "en":
-        from default_preferences import exercises_name
         ask_text = "Do you want to add an exercise?"
     
         menu_key_words = [
@@ -212,6 +206,7 @@ def add_an_exercise(error_text, repeat_text):
         if menu_key_words[0] in text :
             text = ask_new_value(error_text, repeat_text, "", "string")
             exercises_name.append(text)
+            save_an_object(exercises_name, "exercises")
         
         # Leave the menu :
         elif menu_key_words[1] in text :

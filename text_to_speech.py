@@ -6,7 +6,7 @@
 import pyttsx3
 
 
-from default_preferences import user_language
+from default_parameters import user_language
 
 
 def say_text(text):

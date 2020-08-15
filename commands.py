@@ -4,18 +4,18 @@ from math import *
 
 from text_to_speech import say_text
 from speech_rec import listen_text
-from default_preferences import user_preferences, user_language, supported_languages
+from default_parameters import user_language, supported_languages
+from file_management import read_an_object, save_an_object
 
 
 def user_language_preference(argv):
-
     if len(sys.argv) != 1:
         language = sys.argv[1].strip("-")
         if language.lower() in supported_languages:
             user_language.append(language.lower())
     else:
         user_language.append("en")
-    
+
 
 def menu_text(key_words_list):
     if user_language[0] == "fr":
@@ -34,8 +34,9 @@ def menu_text(key_words_list):
     return text
 
 
-def checking_user_preferences(error_text, repeat_text):
+def checking_user_parameters(error_text, repeat_text):
     quit = False
+    user_parameters = read_an_object("durations")
 
     if user_language[0] == "fr":
         exit_text = "Sortie du menu."
@@ -46,7 +47,7 @@ def checking_user_preferences(error_text, repeat_text):
             "quitter",
         ]
 
-        preferences_names = {
+        parameters_names = {
             "session_duration_min" : ["Durée de la session de sport", "minutes."],
             "exercises_duration" : ["Durée de chaque exercice", "secondes"],
             "break_duration" : ["Durée des pauses", "secondes"],
@@ -64,7 +65,7 @@ def checking_user_preferences(error_text, repeat_text):
             "quit",
         ]
 
-        preferences_names = {
+        parameters_names = {
             "session_duration_min" : ["Duration of the sports session", "minutes"],
             "exercises_duration" : ["Duration of each exercise", "seconds"],
             "break_duration" : ["Duration of breaks", "seconds"],
@@ -75,34 +76,34 @@ def checking_user_preferences(error_text, repeat_text):
     
     check_text = menu_text(menu_key_words)
 
-    for k, v in user_preferences.items():
-        for key, value in preferences_names.items():
+    for k, v in user_parameters.items():
+        for key, value in parameters_names.items():
             if quit:
                 say_text(exit_text)
                 break
             
             elif k == key:
-                pref_text = value[0] + " : " + str(v) + " " + value[1]
+                pref_text = value[0] + " : " + str(round(v)) + " " + value[1]
                 say_text(pref_text)
-                preferences_checked = False
+                parameters_checked = False
                 
-                while not preferences_checked:
+                while not parameters_checked:
                     say_text(check_text)
                     text = listen_text()
                     
                     # Don't change value :
                     if menu_key_words[0] in text :
-                        preferences_checked = True
+                        parameters_checked = True
 
                     # Modify value :
                     elif menu_key_words[1] in text :
                         value = ask_new_value(error_text, repeat_text, v, "integer")
-                        user_preferences[k] = int(value)
-                        preferences_checked = True
+                        user_parameters[k] = int(value)
+                        parameters_checked = True
 
                     # Leave menu :
                     elif menu_key_words[2] in text :
-                        preferences_checked = True
+                        parameters_checked = True
                         quit = True
 
                     elif "error" in text:
@@ -114,7 +115,7 @@ def checking_user_preferences(error_text, repeat_text):
         if quit:
             break
 
-    check_text = checking_duration()
+    check_text = checking_duration(user_parameters)
     say_text(check_text)
 
 
@@ -176,7 +177,7 @@ def checking_value(value):
     return True, ok_text
 
 
-def checking_duration():
+def checking_duration(user_parameters):
     if user_language[0] == "fr":
         text = "Vos paramètres sont correctes."
         prb_text = "La durée de votre session de sport est de : "
@@ -187,15 +188,16 @@ def checking_duration():
         prb_text = "The duration of your sports session is : "
         end_prb_text = " minutes."
     
-    mini_duration = user_preferences["exercises_duration"]
-    mini_duration += user_preferences["break_duration"]
-    mini_duration += user_preferences["warm_up_duration"]
-    mini_duration += user_preferences["mini_stretching_duration"]
+    mini_duration = user_parameters["exercises_duration"]
+    mini_duration += user_parameters["break_duration"]
+    mini_duration += user_parameters["warm_up_duration"]
+    mini_duration += user_parameters["mini_stretching_duration"]
     mini_duration = mini_duration/60
 
-    if user_preferences["session_duration_min"] < mini_duration:
+    if user_parameters["session_duration_min"] < mini_duration:
         text = prb_text
         text += str(round(mini_duration)) + end_prb_text
-        user_preferences["session_duration_min"] = mini_duration
+        user_parameters["session_duration_min"] = mini_duration
 
+    save_an_object(user_parameters, "durations")
     return text

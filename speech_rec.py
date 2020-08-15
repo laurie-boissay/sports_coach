@@ -10,7 +10,7 @@ import speech_recognition as sr
 
 
 from text_to_speech import say_text
-from default_preferences import user_language
+from default_parameters import user_language
 
 
 def listen_text():

@@ -1,5 +1,5 @@
-user_preferences = {
- 	"session_duration_min" : 3, #minutes
+user_parameters = {
+    "session_duration_min" : 20, #minutes
     "exercises_duration" : 30, #seconds
     "break_duration" : 20, #seconds
     "warm_up_duration" : 60, #seconds
@@ -8,8 +8,8 @@ user_preferences = {
     }
 
 supported_languages = [
-	"fr",
-	"en",
+    "fr",
+    "en",
 ]
 
 user_language = []
@@ -20,8 +20,8 @@ exercises_name_fr = [
     "patineur",
 ]
 
-exercises_name = [
-    "montez les genoux",
-    "squat",
-    "patineur",
+exercises_name_en = [
+    "raise your knees",
+    "squats",
+    "skater",
 ]
