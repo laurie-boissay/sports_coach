@@ -15,6 +15,11 @@ from default_parameters import user_language
 
 
 def listen_text():
+    """
+    Prompt user to say something.
+    Return what he/she said like a string.
+
+    """
     if user_language[0] == "fr":
         invitation_text = "J'écoute."
     

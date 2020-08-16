@@ -9,6 +9,10 @@ from file_management import read_an_object, save_an_object
 
 
 def user_language_preference(language):
+    """
+    Set the user favorite language.
+
+    """
     if language in supported_languages:
         user_language.append(language)
     else:
@@ -16,6 +20,11 @@ def user_language_preference(language):
 
 
 def menu_text(key_words_list):
+    """
+    Thanks to a list of key words, this function build the
+    sentence used for each menu.
+
+    """
     if user_language[0] == "fr":
         text = "Dîtes : \n"
         or_text = "ou "
@@ -33,6 +42,16 @@ def menu_text(key_words_list):
 
 
 def checking_user_parameters(error_text, repeat_text):
+    """
+    Function called when user wants manage duration parameters.
+
+    For each parameter, the user chooses :
+
+    KEEP the parameter,
+    MODIFY the parameter,
+    QUIT the menu.
+
+    """
     quit = False
     user_parameters = read_an_object("durations")
 
@@ -58,7 +77,7 @@ def checking_user_parameters(error_text, repeat_text):
         exit_text = "Exit the menu."
         
         menu_key_words = [
-            "O K",
+            "keep",
             "modify",
             "quit",
         ]
@@ -118,6 +137,10 @@ def checking_user_parameters(error_text, repeat_text):
 
 
 def ask_new_value(error_text, repeat_text, old_value, value_type):
+    """
+    The function asks what is the new value.
+
+    """
     value_set = False
 
     if user_language[0] == "fr":
@@ -159,6 +182,10 @@ def ask_new_value(error_text, repeat_text, old_value, value_type):
 
 
 def checking_value(value):
+    """
+    Function called when the value must be an integer.
+
+    """
     if user_language[0] == "fr":
         prb_text = "La durée doit être un nombre entier."
         ok_text = "La durée a bien été modifiée."
@@ -176,6 +203,13 @@ def checking_value(value):
 
 
 def checking_duration(user_parameters):
+    """
+    This function checks if the sport session duration is bigger
+    than the other durations (exercise, break, stretchin, warm_up.)
+
+    And if not, modify the session duration.
+
+    """
     if user_language[0] == "fr":
         text = "Vos paramètres sont correctes."
         prb_text = "La durée de votre session de sport est de : "

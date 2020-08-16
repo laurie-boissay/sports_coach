@@ -10,6 +10,11 @@ from file_management import read_an_object, save_an_object
 
 
 def start_exercise(exercise_name, exercises_duration):
+    """
+    For each exercise and break, the program say its name and
+    will say a countdown untill say stop.
+
+    """
     exercise_start = time.time()
     exercise_end = exercise_start + exercises_duration
     p = read_an_object("durations")
@@ -35,6 +40,11 @@ def start_exercise(exercise_name, exercises_duration):
 
 
 def end_exercises(session_start):
+    """
+    At the sport session end, the program say how many time
+    the user spent exercising.
+
+    """
     p = read_an_object("durations")
     p["session_duration_min"] = round((time.time()-session_start)/60)
 
@@ -52,6 +62,10 @@ def end_exercises(session_start):
 
 
 def do_exercises():
+    """
+    This function manage the order of exercises and break.
+
+    """
     p = read_an_object("durations")
     exercises_name = read_an_object("exercises")
     quit = False
@@ -90,6 +104,17 @@ def do_exercises():
 
 
 def checking_exercises(error_text, repeat_text):
+    """
+    Function called when the user wants to manage exercises name.
+
+    For each exercises in list, the user choose :
+
+    KEEP the exercise,
+    MODIFY the exercise,
+    REMOVE the exercise,
+    QUIT the menu.
+
+    """
     quit = False
     exercises_name = read_an_object("exercises")
 
@@ -168,6 +193,11 @@ def checking_exercises(error_text, repeat_text):
 
 
 def clean_up(a_list):
+    """
+    Delete void objects in the list and then check if the
+    contain something.
+
+    """
     if user_language[0] == "fr":
         no_exercises_text = "Il n'y a pas d'exercice dans votre liste."
         
@@ -183,6 +213,13 @@ def clean_up(a_list):
 
     
 def add_an_exercise(error_text, repeat_text):
+    """
+    The user choose :
+
+    ADD an exercise,
+    QUIT the menu.
+
+    """
     quit = False
     exercises_name = read_an_object("exercises")
 
@@ -205,7 +242,7 @@ def add_an_exercise(error_text, repeat_text):
     add_text = menu_text(menu_key_words)
     say_text(ask_text)
 
-    while not quit:        
+    while not quit:
         say_text(add_text)
         text = listen_text()
 

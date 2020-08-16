@@ -3,6 +3,12 @@
 
 """
 This program is a tool to help you to do sport.
+
+It's fully voice controlled. 
+
+You can set your own exercises name, set your duration preferences 
+and save them.
+
 """
 
 ##### RESSOURCES ############################################
@@ -22,11 +28,21 @@ from exercises import do_exercises, checking_exercises
 
 
 def menu_loop():
+    """
+    Ask the user what he/she wants to do :
+
+    START the exercises,
+    Modify DURATIONS,
+    Modify EXERCISES,
+    QUIT the program.
+
+    """
+
+    # In order to work, the language is required.
     parser = argparse.ArgumentParser()
     parser.add_argument("language", help="Supported languages : 'fr', 'en'.")
     args = parser.parse_args()
-    user_language_preference(args.language)
-        
+    user_language_preference(args.language)    
     create_default_pref()
 
     quit = False
@@ -52,7 +68,7 @@ def menu_loop():
         
         menu_key_words = [
             "start",
-            "duration",
+            "durations",
             "exercises",
             "quit",
         ]
