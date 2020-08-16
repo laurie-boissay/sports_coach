@@ -8,11 +8,9 @@ from default_parameters import user_language, supported_languages
 from file_management import read_an_object, save_an_object
 
 
-def user_language_preference(argv):
-    if len(sys.argv) != 1:
-        language = sys.argv[1].strip("-")
-        if language.lower() in supported_languages:
-            user_language.append(language.lower())
+def user_language_preference(language):
+    if language in supported_languages:
+        user_language.append(language)
     else:
         user_language.append("en")
 

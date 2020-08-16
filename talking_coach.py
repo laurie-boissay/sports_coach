@@ -1,13 +1,16 @@
 #!/usr/bin/python3.8
 # coding:u8
 
+"""
+This program is a tool to help you to do sport.
+"""
 
 ##### RESSOURCES ############################################
 #https://stackoverflow.com/questions/4041238/why-use-def-main
 #https://www.pythonforbeginners.com/system/python-sys-argv
 
 
-import sys
+import argparse
 
 
 from text_to_speech import say_text
@@ -18,8 +21,12 @@ from file_management import create_default_pref
 from exercises import do_exercises, checking_exercises
 
 
-def menu_loop(argv):
-    user_language_preference(argv)
+def menu_loop():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("language", help="Supported languages : 'fr', 'en'.")
+    args = parser.parse_args()
+    user_language_preference(args.language)
+        
     create_default_pref()
 
     quit = False
@@ -83,7 +90,7 @@ def menu_loop(argv):
                 
 
 if __name__ == '__main__':
-    menu_loop(sys.argv)
+    menu_loop()
 
 
 

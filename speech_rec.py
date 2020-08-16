@@ -5,6 +5,7 @@
 # https://askubuntu.com/questions/608480/alsa-problems-with-python2-7-unable-to-open-slave
 # https://stackoverflow.com/questions/31603555/unknown-pcm-cards-pcm-rear-pyaudio#31729510
 # https://bbs.archlinux.org/viewtopic.php?id=245040
+# https://github.com/Uberi/speech_recognition/issues/191
 
 import speech_recognition as sr
 
