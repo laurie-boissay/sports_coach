@@ -18,7 +18,7 @@ TO DO :
   
 Whithout music, bad joke or cutesy encouragement ! Try it, it's free !
 
-PREREQUISITE (Windows) :
+PREREQUISITE (Windows 10) :
 
 text_to_speech.py :
 
